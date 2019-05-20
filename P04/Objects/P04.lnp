@@ -1,0 +1,4 @@
+".\Objects\P04.obj",
+".\Objects\stdhead.obj" 
+TO ".\Objects\P04" 
+PRINT(".\Listings\P04.m51")

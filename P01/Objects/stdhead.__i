@@ -1,0 +1,1 @@
+"stdhead.c" OPTIMIZE (8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\stdhead.lst) TABS (8) OBJECT(.\Objects\stdhead.obj)

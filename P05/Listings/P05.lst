@@ -1,0 +1,139 @@
+C51 COMPILER V9.54   P05                                                                   01/18/2019 14:51:13 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE P05
+OBJECT MODULE PLACED IN .\Objects\P05.obj
+COMPILER INVOKED BY: C:\Keil_v5NEW\C51\BIN\C51.EXE P05.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\P0
+                    -5.lst) TABS(8) OBJECT(.\Objects\P05.obj)
+
+line level    source
+
+   1           #include "reg52.h"
+   2           #include "stdhead.h"
+   3          uc  code se[17]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,
+   4                                                       0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x71,0};
+   5          ui time=0,times=0,p=1;
+   6          //uc set1=100,set2=100,set3=100,set4==100;
+   7          bit dir1,dir2,dir3,dir4;                                             
+   8          typedef unsigned char u8;
+   9          typedef unsigned int u32;
+  10          uc flag=0,time4=0;
+  11           void delay1(ui i)
+  12          {
+  13   1              while(i--);
+  14   1      }
+  15          void err()                               //error
+  16          {
+  17   1                SBUF='e';
+  18   1              while(!TI);
+  19   1              TI=0;
+  20   1                 SBUF='r';
+  21   1              while(!TI);
+  22   1              TI=0;
+  23   1                SBUF='r';
+  24   1              while(!TI);
+  25   1              TI=0;
+  26   1                SBUF='o';
+  27   1              while(!TI);
+  28   1              TI=0;
+  29   1                SBUF='r';
+  30   1      
+  31   1      }
+  32          
+  33          int f()                                                //uart pros
+  34          {
+  35   1              ui y;
+  36   1              uc degree=0;
+  37   1               while(RI==0) ;
+  38   1               
+  39   1                      y=SBUF;
+  40   1                       RI=0;
+  41   1                       if(y=='s')
+  42   1                       {
+  43   2      //                      while(RI==0);
+  44   2      //                              y=SBUF;
+  45   2      //                       RI=0;
+  46   2      //                       switch(y)
+  47   2      //                       {
+  48   2      //                               case '1':  
+  49   2      //                              case '2':
+  50   2      //                              case '3':
+  51   2      //                              case '4':
+  52   2      //                              default:err();
+  53   2      //                       }
+  54   2                               while(RI==0);
+C51 COMPILER V9.54   P05                                                                   01/18/2019 14:51:13 PAGE 2   
+
+  55   2                              y=SBUF;
+  56   2                               RI=0;
+  57   2                               if(y=='d')
+  58   2                               {
+  59   3                                      while(RI==0);
+  60   3                                      y=SBUF;
+  61   3                                      RI=0;
+  62   3                                       degree=100*(y-'0');
+  63   3                                      while(RI==0);
+  64   3                                      y=SBUF;
+  65   3                                      RI=0;
+  66   3                                       degree=10*(y-'0')+degree;
+  67   3                                       while(RI==0);
+  68   3                                      y=SBUF;
+  69   3                                      RI=0;
+  70   3                                       degree=y-'0'+degree;
+  71   3                                       if(degree>180) err();
+  72   3                                       else return degree;
+  73   3                               }
+  74   2                               else err();
+  75   2                       }
+  76   1                       else err();
+  77   1      }
+  78                  
+  79          void main()
+  80          {
+  81   1              uart();
+  82   1              while(1)
+  83   1              display(3,f());
+  84   1              
+  85   1      }
+  86                  
+  87          //void pwm() interrupt 3
+  88          //{
+  89          //        TH0=(65536-1000*200)/256;
+  90          //      TL0=(65536-1000*200)%256;
+  91          //       time4++; times++;
+  92          //      if(time4>set1)
+  93          //              dir1=1;
+  94          //      else dir1=0;
+  95          //      if(time4>set2)
+  96          //              dir2=1;
+  97          //      else dir2=0;
+  98          //      if(time4>set3)
+  99          //              dir3=1;
+ 100          //      else dir3=0;
+ 101          //      if(time4>set4)
+ 102          //              dir4=1;
+ 103          //      else dir4=0;
+ 104          //      if(time4==100) time4=0;
+ 105          //      if(times%100)  set1--,set2--;,set3--;,set4--;;
+ 106          //      if(set1<=5) set1=5;
+ 107          //      if(set2<=5) set2=5;
+ 108          //      if(set3<=5) set3=5;
+ 109          //      if(set4<=5) set4=5;
+ 110          //}     
+*** WARNING C291 IN LINE 77 OF P05.c: not every exit path returns a value
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    162    ----
+   CONSTANT SIZE    =     17    ----
+C51 COMPILER V9.54   P05                                                                   01/18/2019 14:51:13 PAGE 3   
+
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      4    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

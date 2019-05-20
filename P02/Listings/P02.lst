@@ -1,0 +1,252 @@
+C51 COMPILER V9.54   P02                                                                   01/18/2019 13:43:31 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE P02
+OBJECT MODULE PLACED IN .\Objects\P02.obj
+COMPILER INVOKED BY: C:\Keil_v5NEW\C51\BIN\C51.EXE P02.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\P0
+                    -2.lst) TABS(8) OBJECT(.\Objects\P02.obj)
+
+line level    source
+
+   1          #include "reg52.h"
+   2           #include "stdhead.h"
+   3          uc  code se[17]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,
+   4                                                       0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x71,0};
+   5          ui time=0,times=0,p=1;
+   6          ui set=100;
+   7          bit dir;                                             
+   8          typedef unsigned char u8;
+   9          typedef unsigned int u32;
+  10          uc flag=0,time4=0;
+  11           void delay1(ui i)
+  12          {
+  13   1              while(i--);
+  14   1      }
+  15          int f(int i)
+  16          {
+  17   1         int n=0;
+  18   1              
+  19   1              while(8-i>0) n=pow(2,i)+n,i++;
+  20   1              return n;
+  21   1              
+  22   1      }
+  23          void f1()
+  24          {
+  25   1              u8 l=8,h=16,cnt=1,u=0;
+  26   1         ET0=0;       
+  27   1         P2=0xff ;
+  28   1              while(1)
+  29   1              {       
+  30   2                      
+  31   2                      while(l!=(cnt>>1))
+  32   2                      {
+  33   3                              switch(cnt)
+  34   3                              {
+  35   4                                      
+  36   4                                      case 2:u=0x81;
+  37   4                                      case 4:u=0xc3;
+  38   4                                      case 8:u=0xe7;
+  39   4                                      
+  40   4                              }
+  41   3                      P2=~(l|h|u);
+  42   3                      
+  43   3                      delay1(300000);
+  44   3                      l>>=1;
+  45   3                      h<<=1;
+  46   3                      }
+  47   2                      cnt<<=1;
+  48   2                      l=8;
+  49   2                      h=16;
+  50   2              }
+  51   1              while(1)
+  52   1              {
+  53   2                      while(l!=(cnt>>1))
+  54   2                      {
+C51 COMPILER V9.54   P02                                                                   01/18/2019 13:43:31 PAGE 2   
+
+  55   3                              switch(cnt)
+  56   3                              {
+  57   4                                      
+  58   4                                      case 2:u=0x81;
+  59   4                                      case 4:u=0xc3;
+  60   4                                      case 8:u=0xe7;
+  61   4                                      
+  62   4                              }
+  63   3                      P2=l|h|u;
+  64   3                      
+  65   3                      delay1(300000);
+  66   3                      l>>=1;
+  67   3                      h<<=1;
+  68   3                      }
+  69   2                      cnt<<=1;
+  70   2                      l=8;
+  71   2                      h=16;
+  72   2              }
+  73   1                      
+  74   1              
+  75   1      }
+  76          void f2()
+  77          {
+  78   1              
+  79   1                timer0(200);
+  80   1              
+  81   1      }
+  82          void f3()
+  83          {
+  84   1                int i,j,aw;
+  85   1              
+  86   1              for(j=8;i>=0;j--)
+  87   1              {
+  88   2            if(j==0) break;
+  89   2                  for(i=0;i<j;i++)
+  90   2                 {
+  91   3                      aw=f(j)+pow(2,i);
+  92   3                      aw=~aw;
+  93   3                       P2=aw;
+  94   3                      delay1(1e4);
+  95   3                              
+  96   3                 }
+  97   2      
+  98   2               }
+  99   1              
+ 100   1               
+ 101   1          for(j=8;i>=0;j--)
+ 102   1              {
+ 103   2            if(j==0) break;
+ 104   2                  for(i=0;i<j;i++)
+ 105   2                 {
+ 106   3                      aw=f(j)+pow(2,i);
+ 107   3                       P2=aw;
+ 108   3                      delay1(1e4);
+ 109   3                              
+ 110   3                 }
+ 111   2      
+ 112   2               }
+ 113   1      //{       uc t=0,cnt=7,l=1,j=0xff;
+ 114   1      //        bit f3flag=1,z=0;
+ 115   1      //      ET0=0;
+ 116   1      //      while(1)
+C51 COMPILER V9.54   P02                                                                   01/18/2019 13:43:31 PAGE 3   
+
+ 117   1      //      {       if(z==0) 
+ 118   1      //              if(f3flag)P2=~((l<<t ) | j) ;
+ 119   1      //              else  P2=(l<<t ) | j ;
+ 120   1      //              t++;
+ 121   1      //              delay1(1000);
+ 122   1      //              if(t>cnt)   
+ 123   1      //              {                       
+ 124   1      //                      t=0;
+ 125   1      //                      j<<=cnt;
+ 126   1      //                      cnt--;
+ 127   1      //                      if(cnt==0)
+ 128   1      //                              f3flag=0;
+ 129   1      //              }
+ 130   1      //      }
+ 131   1      }       
+ 132          //void f4()
+ 133          //{
+ 134          //      ET0=0;
+ 135          //      timer1(200);
+ 136          //      uc t=1,z=0;
+ 137          //      bit flag;
+ 138          //      while(key()==-1);
+ 139          //      z=keynum;
+ 140          //       P2=t<<keynum;
+ 141          //      keynum=-1;
+ 142          //      while(key()==-1);
+ 143          //      if(keynum==8)  flag=1;
+ 144          //      else flag=0;
+ 145          //      
+ 146          //       z=0;
+ 147          //}     
+ 148                  
+ 149          
+ 150          void main()
+ 151          {      
+ 152   1              //k1=1;
+ 153   1      //      k2=1;
+ 154   1      //      k3=1;
+ 155   1      //      k4=1;
+ 156   1              while(1)
+ 157   1              {
+ 158   2      
+ 159   2                      E:;
+ 160   2                      if(k1==0)
+ 161   2                      {   delay1(1000);
+ 162   3                              if(k1==0)
+ 163   3                                      flag=1;
+ 164   3                      }
+ 165   2                      else if(k2==0)
+ 166   2                      {   delay1(1000);
+ 167   3                              if(k2==0)
+ 168   3                                      flag=2;
+ 169   3                      }
+ 170   2                      else if(k3==0)
+ 171   2                      {   delay1(1000);
+ 172   3                              if(k3==0)
+ 173   3                                      flag=3;
+ 174   3                      }
+ 175   2                      else if(k4==0)
+ 176   2                      {   delay1(1000);
+ 177   3                              if(k4==0)
+ 178   3                                      flag=4;
+C51 COMPILER V9.54   P02                                                                   01/18/2019 13:43:31 PAGE 4   
+
+ 179   3                      }
+ 180   2                      
+ 181   2                      if(flag!=0)
+ 182   2                      {
+ 183   3                      switch(flag)
+ 184   3                      {
+ 185   4                              case 1:f1(); break;
+ 186   4                              case 2:f2();  break;
+ 187   4                              case 3:f3();  break;
+ 188   4                              case 4:f4();  break;
+*** WARNING C206 IN LINE 188 OF P02.c: 'f4': missing function-prototype
+ 189   4                              
+ 190   4                      }
+ 191   3                      flag=0;
+ 192   3                      delay1(10000);
+ 193   3                      }
+ 194   2              }
+ 195   1      }
+*** WARNING C280 IN LINE 159 OF P02.c: 'E': unreferenced label
+ 196          void f2int() interrupt 1
+ 197          {       time++;
+ 198   1              TH0=(65536-1000*200)/256;
+ 199   1              TL0=(65536-1000*200)%256;
+ 200   1              if(time%50==0)  p=p<<1;
+ 201   1              P2=~p;
+ 202   1              delay1(1000);
+ 203   1               P2=0xff;
+ 204   1              delay1(2000);
+ 205   1              
+ 206   1      }       
+ 207          
+ 208          void pwm() interrupt 3
+ 209          {
+ 210   1                TH0=(65536-1000*200)/256;
+ 211   1              TL0=(65536-1000*200)%256;
+ 212   1               time4++; times++;
+ 213   1              if(time4>set)
+ 214   1                      dir=1;
+ 215   1              else dir=0;
+ 216   1              if(time4==100) time4=0;
+ 217   1              if(times%100)  set--;
+ 218   1              if(set<=5) set=5;
+ 219   1      }       
+ 220                  
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    815    ----
+   CONSTANT SIZE    =     17    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     10      11
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)

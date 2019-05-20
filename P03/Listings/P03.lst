@@ -1,0 +1,102 @@
+C51 COMPILER V9.54   P03                                                                   01/18/2019 10:46:17 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE P03
+OBJECT MODULE PLACED IN .\Objects\P03.obj
+COMPILER INVOKED BY: C:\Keil_v5NEW\C51\BIN\C51.EXE P03.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\P0
+                    -3.lst) TABS(8) OBJECT(.\Objects\P03.obj)
+
+line level    source
+
+   1          #include "reg52.h"
+   2           #include "stdhead.h"
+   3           uc y=0,dat,t=0;
+   4          void f()
+   5          {
+   6   1                SBUF='e';
+   7   1              while(!TI);
+   8   1              TI=0;
+   9   1                 SBUF='r';
+  10   1              while(!TI);
+  11   1              TI=0;
+  12   1                SBUF='r';
+  13   1              while(!TI);
+  14   1              TI=0;
+  15   1                SBUF='o';
+  16   1              while(!TI);
+  17   1              TI=0;
+  18   1                SBUF='r';
+  19   1      
+  20   1      }
+  21          void main()
+  22          {
+  23   1              
+  24   1                uart();
+  25   1                while(RI==0) ;
+  26   1                      
+  27   1                      y=SBUF;
+  28   1              RI=0;
+  29   1                 if( y==0xa0)
+  30   1                 {
+  31   2                         while(RI==0) ;
+  32   2                         
+  33   2                          y=SBUF;
+  34   2                         RI=0;
+  35   2                         t=y;
+  36   2                         switch(y)
+  37   2                         {    case 1:P2=0xfe;break;
+  38   3                                 case 2:P2=0xfd;break;
+  39   3                                 case 3:P2=0xfb;break;
+  40   3                                 default :f();goto E;
+  41   3                         }
+  42   2                         while(RI==0) ;
+  43   2                         
+  44   2                          y=SBUF;
+  45   2                         RI=0;
+  46   2                         t=y+t;
+  47   2                         while(y--)
+  48   2                         {
+  49   3                                 while(RI==0);
+  50   3                                 
+  51   3                                         dat=SBUF;
+  52   3                                        RI=0;
+  53   3                                      SBUF=dat;
+  54   3                                         
+C51 COMPILER V9.54   P03                                                                   01/18/2019 10:46:17 PAGE 2   
+
+  55   3                                         while(!TI);
+  56   3                                 
+  57   3                         }
+  58   2                          while(RI==0) ;
+  59   2                          y=SBUF;
+  60   2                         RI=0;
+  61   2                         if(y!=t)   f();goto E;
+  62   2                           while(RI==0) ;
+  63   2                          y=SBUF;
+  64   2                         RI=0;
+  65   2                         if(y!=0xaa)   f();
+  66   2                        
+  67   2                         
+  68   2                                 
+  69   2                 }
+  70   1                 else {f();led7=0;}
+  71   1                 
+  72   1                  E:;
+  73   1              while(1);         
+  74   1              
+  75   1      }
+  76          //a0 01 03 c1 c2 c3 04 aa       
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    153    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      3    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,168 @@
+C51 COMPILER V9.54   P04                                                                   01/18/2019 14:32:02 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE P04
+OBJECT MODULE PLACED IN .\Objects\P04.obj
+COMPILER INVOKED BY: C:\Keil_v5NEW\C51\BIN\C51.EXE P04.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\P0
+                    -4.lst) TABS(8) OBJECT(.\Objects\P04.obj)
+
+line level    source
+
+   1          
+   2           #include "stdhead.h"
+   3           typedef unsigned char u8;
+   4            typedef unsigned short u16;
+   5          typedef unsigned int u32;
+   6          sbit IRIN=P3^2;
+   7          
+   8          u8 IrValue[6];
+   9          u8 Time;
+  10          u16 num=0;
+  11          bit flag=0;
+  12          
+  13          void delay1(ui t) 
+  14          {
+  15   1                while(t--);
+  16   1      }
+  17           void IrInit()
+  18          {
+  19   1              IT0=1;
+  20   1              EX0=1;
+  21   1              EA=1;   
+  22   1      
+  23   1              IRIN=1;
+  24   1      }
+  25          int  dat(ui t)
+  26           {
+  27   1               switch(t)
+  28   1               {       case   242:return -2;
+  29   2                       case   243:return 1;
+  30   2                       case   231:return 2;
+  31   2                       case   233:return 2;
+  32   2                       case  161:return 3;
+  33   2                       case  58:return 5;
+  34   2                       case  165:return 6;
+  35   2                       case 189:return 7;
+  36   2                       case 173:return 8;
+  37   2                       case 181:return 9;
+  38   2                       case 247:return 4;
+  39   2                       case   230:return -1;
+  40   2               }
+  41   1       }
+  42          
+  43           void main()
+  44           {
+  45   1               timer0(200);
+  46   1               IrInit();
+  47   1               E:; 
+  48   1              if(flag)
+  49   1              {
+  50   2                      num=dat(IrValue[2]);
+  51   2                      flag=0;
+  52   2                      B:;
+  53   2                      while(!flag);
+  54   2                      if( IrValue[2]==-1){ num=0,flag=0;goto E; }
+C51 COMPILER V9.54   P04                                                                   01/18/2019 14:32:02 PAGE 2   
+
+  55   2                      else 
+  56   2                      {
+  57   3                              num=num*10+dat(IrValue[2]);
+  58   3                              flag=0;
+  59   3                      }
+  60   2                      G:;
+  61   2                      while(!flag);
+  62   2                      if( IrValue[2]==-1) {num=num/10,flag=0;goto B; }
+  63   2                      else 
+  64   2                      {
+  65   3                      num=num*10+dat(IrValue[2]);
+  66   3                      flag=0;
+  67   3                      }
+  68   2                      while(dat(IrValue[2])!=-2)
+  69   2                      if( IrValue[2]==-1) {num=num/10,flag=0;goto G;}
+  70   2                      while(1);
+  71   2               
+  72   2       }
+  73   1              }
+  74           void ReadIr() interrupt 0
+  75          {
+  76   1              u8 j,k;
+  77   1              u16 err;
+  78   1              Time=0;                                  
+  79   1              delay1(700);    
+  80   1              if(IRIN==0)             
+  81   1              {        
+  82   2                       flag=1;
+  83   2                      err=1000;                               
+  84   2                      /*当两个条件都为真是循环，如果有一个条件为假的时候跳出循环，免得程序出错的时
+  85   2                      侯，程序死在这里*/      
+  86   2                      while((IRIN==0)&&(err>0))       //等待前面9ms的低电平过去               
+  87   2                      {                       
+  88   3                              delay1(1);
+  89   3                              err--;
+  90   3                      } 
+  91   2                      if(IRIN==1)                     //如果正确等到9ms低电平
+  92   2                      {
+  93   3                              err=500;
+  94   3                              while((IRIN==1)&&(err>0))                //等待4.5ms的起始高电平过去
+  95   3                              {
+  96   4                                      delay1(1);
+  97   4                                      err--;
+  98   4                              }
+  99   3                              for(k=0;k<4;k++)                //共有4组数据
+ 100   3                              {                               
+ 101   4                                      for(j=0;j<8;j++)        //接收一组数据
+ 102   4                                      {
+ 103   5      
+ 104   5                                              err=60;         
+ 105   5                                              while((IRIN==0)&&(err>0))//等待信号前面的560us低电平过去
+ 106   5                                              {
+ 107   6                                                      delay1(1);
+ 108   6                                                      err--;
+ 109   6                                              }
+ 110   5                                              err=500;
+ 111   5                                              while((IRIN==1)&&(err>0))        //计算高电平的时间长度。
+ 112   5                                              {
+ 113   6                                                      delay1(10);      //0.1ms
+ 114   6                                                      Time++;
+ 115   6                                                      err--;
+ 116   6                                                      if(Time>30)
+C51 COMPILER V9.54   P04                                                                   01/18/2019 14:32:02 PAGE 3   
+
+ 117   6                                                      {
+ 118   7                                                              return;
+ 119   7                                                      }
+ 120   6                                              }
+ 121   5                                              IrValue[k]>>=1;  //k表示第几组数据
+ 122   5                                              if(Time>=8)                     //如果高电平出现大于565us，那么是1
+ 123   5                                              {
+ 124   6                                                      IrValue[k]|=0x80;
+ 125   6                                              }
+ 126   5                                              Time=0;         //用完时间要重新赋值                                                    
+ 127   5                                      }
+ 128   4                              }
+ 129   3                      }
+ 130   2                      if(IrValue[2]!=~IrValue[3])
+ 131   2                      {
+ 132   3                              return;
+ 133   3                      }
+ 134   2              }                       
+ 135   1      }
+ 136          void exit() interrupt 1
+ 137          {
+ 138   1                display(3,num);
+ 139   1      }
+*** WARNING C291 IN LINE 41 OF P04.c: not every exit path returns a value
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    590    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      9       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
